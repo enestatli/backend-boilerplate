@@ -2,6 +2,7 @@ const UserModel = require('../../db/models/user');
 const { logger } = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
 const { Utils } = require('../../utils');
+const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
 
 class User {
   constructor(router) {
@@ -12,7 +13,7 @@ class User {
   authRoutes() {
     this.router.post(
       '/auth/register',
-      requireAuth,
+      protectWithApiKey,
       this.registerUser.bind(this)
     );
     this.router.post('/auth/login', requireAuth, this.loginUser.bind(this));

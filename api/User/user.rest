@@ -1,6 +1,7 @@
 # Save new user 
 POST http://localhost:3000/api/auth/register 
 content-type: application/json
+apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
@@ -12,6 +13,7 @@ content-type: application/json
 # Login new user 
 POST http://localhost:3000/api/auth/login 
 content-type: application/json
+apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
