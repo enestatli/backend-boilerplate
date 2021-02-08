@@ -2,24 +2,24 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { isEmail } = require('validator');
 
-//TODO: instead of using status codes mb put error itself
+//TODO: instead of using error itself mb put status code
 
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 422],
+    required: [true, 'Please enter your name'],
   },
   email: {
     type: String,
-    required: [true, 422],
+    required: [true, 'Please enter an email'],
     unique: true,
     lowercase: true,
-    validate: [isEmail, 422],
+    validate: [isEmail, 'Please enter a valid email'],
   },
   password: {
     type: String,
-    required: [true, 422],
-    minlength: [6, 422],
+    required: [true, 'Please enter a password'],
+    minlength: [6, 'Minimumum password length is 6 characters'],
   },
 });
 

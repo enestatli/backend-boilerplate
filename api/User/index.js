@@ -2,8 +2,8 @@ const UserModel = require('../../db/models/user');
 const { logger } = require('../../logger');
 
 class User {
-  constructor(route) {
-    this.route = router;
+  constructor(router) {
+    this.router = router;
     this.authRoutes();
   }
 
