@@ -1,5 +1,7 @@
 const UserModel = require('../../db/models/user');
 const { logger } = require('../../logger');
+const { requireAuth } = require('../../middleware/auth');
+const { Utils } = require('../../utils');
 
 class User {
   constructor(router) {
@@ -8,8 +10,12 @@ class User {
   }
 
   authRoutes() {
-    this.router.post('/auth/register', this.registerUser.bind(this));
-    this.router.post('/auth/login', this.loginUser.bind(this));
+    this.router.post(
+      '/auth/register',
+      requireAuth,
+      this.registerUser.bind(this)
+    );
+    this.router.post('/auth/login', requireAuth, this.loginUser.bind(this));
   }
 
   async loginUser(req, res) {
@@ -24,6 +30,8 @@ class User {
         res.sendStatus(404); // Not Found
         return;
       }
+      const token = Utils.createToken(user._id);
+      res.cookie('jwt', token, { httpOnly: true, maxAge: Utils.maxAge * 1000 });
       res.json(user);
     } catch (error) {
       logger.error(error);
@@ -43,14 +51,17 @@ class User {
       return;
     }
 
-    const user = await UserModel.createNew({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    });
+    const { name, email, password } = req.body;
+    const user = await UserModel.createNew({ name, email, password });
 
     try {
       if (user && user.email) {
+        const token = Utils.createToken(user._id);
+        res.cookie('jwt', token, {
+          httpOnly: true,
+          maxAge: Utils.maxAge * 1000,
+        });
+        // res.sendStatus(201); // Created
         res.json(user);
         return;
       }
