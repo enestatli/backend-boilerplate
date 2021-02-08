@@ -9,7 +9,7 @@ class User {
 
   authRoutes() {
     this.router.post('/auth/register', this.registerUser.bind(this));
-    this.router.post('/auth/register', this.loginUser.bind(this));
+    this.router.post('/auth/login', this.loginUser.bind(this));
   }
 
   async loginUser(req, res) {
@@ -21,7 +21,7 @@ class User {
     const user = await UserModel.login(req.body.email, req.body.password);
     try {
       if (!user || !user.email) {
-        res.sendStatus(422);
+        res.sendStatus(404); // Not Found
         return;
       }
       res.json(user);

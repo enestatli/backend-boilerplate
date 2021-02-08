@@ -42,9 +42,7 @@ userSchema.statics.login = async function (email, password) {
   return user;
 };
 
-var User = mongoose.model('user', userSchema);
-
-userSchema.static.createNew = async function ({ email, password, name }) {
+userSchema.statics.createNew = async function ({ email, password, name }) {
   const isUser = await this.findOne({ email });
   if (isUser && isUser.email) {
     return;
@@ -55,5 +53,7 @@ userSchema.static.createNew = async function ({ email, password, name }) {
 
   return user;
 };
+
+var User = mongoose.model('user', userSchema);
 
 module.exports = User;
