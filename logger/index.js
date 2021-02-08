@@ -12,8 +12,8 @@ const prodLogger = winston.createLogger({
 });
 
 const devLogger = {
-  info: (msg) => console.log(colors.yellow(msg)),
-  error: (msg) => console.log(colors).red(msg),
+  info: (msg) => console.log(colors.cyan(msg)),
+  error: (msg) => console.log(colors.red(msg)),
 };
 
 module.exports =
