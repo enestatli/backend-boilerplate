@@ -5,6 +5,10 @@ const { isEmail } = require('validator');
 //TODO: instead of using status codes mb put error itself
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 422],
+  },
   email: {
     type: String,
     required: [true, 422],
