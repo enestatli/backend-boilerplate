@@ -14,9 +14,15 @@ class User {
     this.router.post(
       '/auth/register',
       protectWithApiKey,
+      requireAuth,
       this.registerUser.bind(this)
     );
-    this.router.post('/auth/login', requireAuth, this.loginUser.bind(this));
+    this.router.post(
+      '/auth/login',
+      protectWithApiKey,
+      requireAuth,
+      this.loginUser.bind(this)
+    );
   }
 
   async loginUser(req, res) {

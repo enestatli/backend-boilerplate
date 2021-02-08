@@ -5,7 +5,7 @@ apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
-"name": "enes tatli", "email": "test12@test.com", "password": "123qwe"
+"name": "enes tatli", "email": "test13@test.com", "password": "123qwe"
 }
 
 ###
