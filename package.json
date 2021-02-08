@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/enestatli/backend-boilerplate/issues"
   },
-  "homepage": "https://github.com/enestatli/backend-boilerplate#readme"
+  "homepage": "https://github.com/enestatli/backend-boilerplate#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
