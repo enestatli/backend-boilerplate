@@ -8,6 +8,8 @@ const { useMiddlewares } = require('./middleware');
 
 const app = express();
 
+require('./db');
+
 useMiddlewares(app);
 
 app.get('/', (req, res) => {
