@@ -4,7 +4,7 @@ content-type: application/json
 
 
 {
-"name": "enes tatli", "email": "test@test.com", "password": "123qwe"
+"name": "enes tatli", "email": "test12@test.com", "password": "123qwe"
 }
 
 ###
@@ -15,7 +15,7 @@ content-type: application/json
 
 
 {
-"email": "test@test1.com", "password": "123qwe"
+"email": "test12@test.com", "password": "123qwe"
 }
 
 ###
