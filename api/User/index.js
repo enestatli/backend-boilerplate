@@ -8,8 +8,8 @@ class User {
   }
 
   authRoutes() {
-    this.router.post('/auth/register/', this.registerUser.bind(this));
-    this.router.post('/auth/register/', this.loginUser.bind(this));
+    this.router.post('/auth/register', this.registerUser.bind(this));
+    this.router.post('/auth/register', this.loginUser.bind(this));
   }
 
   async loginUser(req, res) {
@@ -61,3 +61,5 @@ class User {
     }
   }
 }
+
+module.exports = { User };
