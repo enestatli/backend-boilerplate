@@ -7,6 +7,7 @@ mongoose
   .connect(`${config.mongoDbAtlasUri}`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useCreateIndex: true,
   })
   .then(() => {
     logger.info(`Connected to mongodb: ${config.mongoDbAtlasUri}`);
