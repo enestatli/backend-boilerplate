@@ -1,0 +1,22 @@
+# Save new user 
+POST http://localhost:3000/api/auth/register 
+content-type: application/json
+
+
+{
+"name": "enes tatli", "email": "test@test.com", "password": "123qwe"
+}
+
+###
+
+# Login new user 
+POST http://localhost:3000/api/auth/login 
+content-type: application/json
+
+
+{
+"email": "test@test1.com", "password": "123qwe"
+}
+
+###
+
