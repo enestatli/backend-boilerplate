@@ -31,15 +31,18 @@ class Auth {
       return;
     }
 
+    const { email, password } = req.body;
+
     const user = await UserModel.login(req.body.email, req.body.password);
     try {
-      if (!user || !user.email) {
-        res.sendStatus(404); // Not Found
+      const user = await UserModel.findOne({ email });
+      if (user === null) {
+        res.sendStatus(404); // user doesn't exist
         return;
       }
-      const token = Utils.createToken(user._id);
-      res.cookie('jwt', token, { httpOnly: true, maxAge: Utils.maxAge * 1000 });
-      res.json(user);
+
+      const token = Utils.createToken(user._id.toJSON());
+      res.json({ user, authorized: true, status: 200, token });
     } catch (error) {
       logger.error(error);
       res.sendStatus(500);
@@ -70,13 +73,8 @@ class Auth {
       const user = await UserModel.createNew({ name, email, password });
 
       if (user && user.email) {
-        const token = Utils.createToken(user._id);
-        res.cookie('jwt', token, {
-          httpOnly: true,
-          maxAge: Utils.maxAge * 1000,
-        });
-        // res.sendStatus(201); // Created
-        res.json({ user, status: 201, authorized: true });
+        const token = Utils.createToken(user._id.toJSON());
+        res.json({ user, status: 201, authorized: true, token });
         return;
       }
     } catch (error) {
