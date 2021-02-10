@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const querystring = require('querystring');
 
 class Utils {
   static maxAge = 3 * 24 * 60 * 60;
@@ -8,9 +9,14 @@ class Utils {
     });
     return token;
   }
+
   static verify(token) {
     const decoded = jwt.verify(token, 'my little secret');
     return decoded;
+  }
+
+  static queryStrinify(email, token) {
+    return querystring.stringify({ email, token });
   }
 }
 

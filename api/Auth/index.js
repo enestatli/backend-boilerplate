@@ -3,6 +3,8 @@ const { logger } = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
 const { Utils } = require('../../utils');
 const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
+const { config } = require('../../config');
+const { SendEmail } = require('../../libs');
 
 class Auth {
   constructor(router) {
@@ -25,6 +27,12 @@ class Auth {
     );
     this.router.post(
       '/password',
+      protectWithApiKey,
+      requireAuth,
+      this.updatePassword.bind(this)
+    );
+    this.router.post(
+      '/forget-password',
       protectWithApiKey,
       requireAuth,
       this.updatePassword.bind(this)
@@ -110,6 +118,32 @@ class Auth {
       }
     } catch (error) {
       logger.error('Error in updatePassword <Auth>', error);
+      res.sendStatus(500);
+    }
+  }
+
+  async forget(req, res) {
+    if (!req.body || !req.body.email) {
+      res.sendStatus(400);
+      return;
+    }
+
+    try {
+      const user = await UserModel.findOne({ email: req.body.email });
+      if (user === null) {
+        res.sendStatus(404);
+        return;
+      }
+
+      const token = Utils.createToken(user._id.toJSON());
+      const queries = Utils.queryStrinify(user.email, token);
+
+      await SendEmail.ResetPassword(
+        `${config.baseUrl}/update-password?${queries}`,
+        user.email
+      );
+      res.sendStatus(204); // success
+    } catch (error) {
       res.sendStatus(500);
     }
   }
