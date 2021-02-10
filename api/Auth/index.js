@@ -26,7 +26,7 @@ class Auth {
   }
 
   async loginUser(req, res) {
-    if (!req || !req.body || !req.body.email || !req.body.password) {
+    if (!req.body || !req.body.email || !req.body.password) {
       res.sendStatus(400); // missing body
       return;
     }
@@ -50,13 +50,7 @@ class Auth {
   }
 
   async registerUser(req, res) {
-    if (
-      !req ||
-      !req.body ||
-      !req.body.name ||
-      !req.body.email ||
-      !req.body.password
-    ) {
+    if (!req.body || !req.body.name || !req.body.email || !req.body.password) {
       res.sendStatus(400); // missing body
       return;
     }
