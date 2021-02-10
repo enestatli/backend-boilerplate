@@ -27,7 +27,7 @@ class Auth {
 
   async loginUser(req, res) {
     if (!req || !req.body || !req.body.email || !req.body.password) {
-      res.sendStatus(422); // unprocessable entity
+      res.sendStatus(400); // missing body
       return;
     }
 
@@ -54,14 +54,21 @@ class Auth {
       !req.body.email ||
       !req.body.password
     ) {
-      res.sendStatus(422); // unprocessable entity
+      res.sendStatus(400); // missing body
       return;
     }
 
     const { name, email, password } = req.body;
-    const user = await UserModel.createNew({ name, email, password });
 
     try {
+      const existingUser = await UserModel.findOne({ email });
+      if (existingUser !== null) {
+        res.sendStatus(409); // conflict
+        return;
+      }
+
+      const user = await UserModel.createNew({ name, email, password });
+
       if (user && user.email) {
         const token = Utils.createToken(user._id);
         res.cookie('jwt', token, {
@@ -69,12 +76,11 @@ class Auth {
           maxAge: Utils.maxAge * 1000,
         });
         // res.sendStatus(201); // Created
-        res.json(user);
+        res.json({ user, status: 201, authorized: true });
         return;
       }
-      res.sendStatus(409); // conflict
     } catch (error) {
-      logger.error(error);
+      logger.error('Error in registeredUser <Auth>', error);
       res.sendStatus(500); // server error
     }
   }
