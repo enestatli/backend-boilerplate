@@ -8,6 +8,10 @@ class Utils {
     });
     return token;
   }
+  static verify(token) {
+    const decoded = jwt.verify(token, 'my little secret');
+    return decoded;
+  }
 }
 
 module.exports = { Utils };

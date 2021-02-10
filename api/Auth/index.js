@@ -23,6 +23,12 @@ class Auth {
       requireAuth,
       this.loginUser.bind(this)
     );
+    this.router.post(
+      '/password',
+      protectWithApiKey,
+      requireAuth,
+      this.updatePassword.bind(this)
+    );
   }
 
   async loginUser(req, res) {
@@ -74,6 +80,37 @@ class Auth {
     } catch (error) {
       logger.error('Error in registeredUser <Auth>', error);
       res.sendStatus(500); // server error
+    }
+  }
+
+  async updatePassword(req, res) {
+    if (!req.body || !req.body.email || !req.body.password || !req.body.token) {
+      res.sendStatus(400); // missing body
+      return;
+    }
+
+    try {
+      const user = await UserModel.findOne({ email: req.body.email });
+      if (user === null) {
+        res.sendStatus(404);
+      }
+
+      const decoded = Utils.verify(req.body.token);
+      if (decoded) {
+        user.password = req.body.password;
+        user
+          .save()
+          .then(() => res.sendStatus(204)) // success
+          .catch((e) => {
+            logger.error('Error in updatePassword <Auth>', e);
+            res.sendStatus(500);
+          });
+      } else {
+        res.sendStatus(403); // wrong token provided
+      }
+    } catch (error) {
+      logger.error('Error in updatePassword <Auth>', error);
+      res.sendStatus(500);
     }
   }
 }
