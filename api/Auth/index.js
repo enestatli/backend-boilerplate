@@ -4,7 +4,7 @@ const { requireAuth } = require('../../middleware/auth');
 const { Utils } = require('../../utils');
 const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
 
-class User {
+class Auth {
   constructor(router) {
     this.router = router;
     this.authRoutes();
@@ -80,4 +80,4 @@ class User {
   }
 }
 
-module.exports = { User };
+module.exports = { Auth };
