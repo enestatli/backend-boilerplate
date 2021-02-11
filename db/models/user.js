@@ -32,7 +32,7 @@ userSchema.pre('save', async function (next) {
 userSchema.statics.login = async function (email, password) {
   const user = await this.findOne({ email });
   if (!user) {
-    return 401; // unauthrozied
+    return 404; // not found
   }
 
   const auth = await bcrypt.compare(password, user.password);
@@ -45,7 +45,7 @@ userSchema.statics.login = async function (email, password) {
 userSchema.statics.createNew = async function ({ email, password, name }) {
   const isUser = await this.findOne({ email });
   if (isUser && isUser.email) {
-    return;
+    return 409;
   }
   const user = new User({ name, email, password });
 

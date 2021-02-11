@@ -14,7 +14,7 @@ require('./db');
 
 useMiddlewares(app);
 
-app.get('*', checkUser);
+// app.get('*', checkUser);
 app.use('/api', router);
 
 app.listen(config.port, () =>
