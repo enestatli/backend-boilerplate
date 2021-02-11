@@ -5,7 +5,7 @@ apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
-"name": "enes tatli", "email": "rtest13@test.com", "password": "123qwe"
+"name": "enes tatli", "email": "eenestatli2@gmail.com", "password": "123qwe"
 }
 
 ###
@@ -17,8 +17,32 @@ apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
-"email": "test12@test.com", "password": "123qwe"
+"email": "eenestatli@gmail.com", "password": "12345678"
 }
 
 ###
+
+# Password forget
+POST http://localhost:3000/api/auth/forget-password
+content-type: application/json
+apiKey: bbe44b27f2ea4464a198c929c1adc49e
+
+{
+"email": "eenestatli@gmail.com"
+}
+
+###
+
+# Password update
+POST http://localhost:3000/api/auth/update-password
+content-type: application/json
+apiKey: bbe44b27f2ea4464a198c929c1adc49e
+
+
+{
+  "email": "eenestatli@gmail.com",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMjUxZmE5MDZlYTI0MmRkNDVmOWM4ZiIsImlhdCI6MTYxMzA0NzM3NCwiZXhwIjoxNjEzMzA2NTc0fQ.v1VTIKtOBMSLja7sixwPTpqezjR5Yeun0f7QXmUd1iQ",
+  "password": "12345678"
+}
+
 
