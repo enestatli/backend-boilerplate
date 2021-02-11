@@ -16,54 +16,51 @@ class Auth {
     this.router.post(
       '/auth/register',
       protectWithApiKey,
-      requireAuth,
-      this.registerUser.bind(this)
+      // requireAuth,
+      this.register.bind(this)
     );
     this.router.post(
       '/auth/login',
       protectWithApiKey,
-      requireAuth,
-      this.loginUser.bind(this)
+      // requireAuth,
+      this.login.bind(this)
     );
     this.router.post(
-      '/password',
+      '/auth/update-password',
       protectWithApiKey,
-      requireAuth,
       this.updatePassword.bind(this)
     );
     this.router.post(
-      '/forget-password',
+      '/auth/forget-password',
       protectWithApiKey,
-      requireAuth,
-      this.updatePassword.bind(this)
+      this.forget.bind(this)
     );
   }
 
-  async loginUser(req, res) {
+  async login(req, res) {
     if (!req.body || !req.body.email || !req.body.password) {
       res.sendStatus(400); // missing body
       return;
     }
 
     const { email, password } = req.body;
+    const user = await UserModel.login(email, password);
 
-    const user = await UserModel.login(req.body.email, req.body.password);
     try {
-      const user = await UserModel.findOne({ email });
-      if (user === null) {
-        res.sendStatus(404); // user doesn't exist
+      if (typeof user === 'number') {
+        res.sendStatus(user); // user doesn't exist
         return;
       }
 
       const token = Utils.createToken(user._id.toJSON());
       res.json({ user, authorized: true, status: 200, token });
     } catch (error) {
-      logger.error(error);
+      logger.error(__dirname + '\\index.js', error);
       res.sendStatus(500);
     }
   }
 
-  async registerUser(req, res) {
+  async register(req, res) {
     if (!req.body || !req.body.name || !req.body.email || !req.body.password) {
       res.sendStatus(400); // missing body
       return;
@@ -72,13 +69,12 @@ class Auth {
     const { name, email, password } = req.body;
 
     try {
-      const existingUser = await UserModel.findOne({ email });
-      if (existingUser !== null) {
-        res.sendStatus(409); // conflict
+      const user = await UserModel.createNew({ name, email, password });
+
+      if (typeof user === 'number') {
+        res.sendStatus(user);
         return;
       }
-
-      const user = await UserModel.createNew({ name, email, password });
 
       if (user && user.email) {
         const token = Utils.createToken(user._id.toJSON());
@@ -117,7 +113,7 @@ class Auth {
         res.sendStatus(403); // wrong token provided
       }
     } catch (error) {
-      logger.error('Error in updatePassword <Auth>', error);
+      logger.error(__dirname + '\\index.js', error);
       res.sendStatus(500);
     }
   }
@@ -135,15 +131,13 @@ class Auth {
         return;
       }
 
-      const token = Utils.createToken(user._id.toJSON());
-      const queries = Utils.queryStrinify(user.email, token);
+      const queries = Utils.queryStrinify(user);
+      const resetUrl = `${config.baseUrl}/update-password?${queries}`;
 
-      await SendEmail.ResetPassword(
-        `${config.baseUrl}/update-password?${queries}`,
-        user.email
-      );
+      await SendEmail.ResetPassword(resetUrl, user.email);
       res.sendStatus(204); // success
     } catch (error) {
+      logger.error(__dirname + '\\index.js', error);
       res.sendStatus(500);
     }
   }
