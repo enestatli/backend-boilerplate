@@ -11,7 +11,7 @@ class Email {
       const html = renderer(filename, { link });
 
       await transporter.sendMail({
-        from: 'info@backendboilerplate.com',
+        from: 'eenestatli@gmail.com',
         to: email,
         subject: 'BackendBoilerPlate reset password',
         html,

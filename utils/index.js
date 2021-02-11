@@ -15,8 +15,15 @@ class Utils {
     return decoded;
   }
 
-  static queryStrinify(email, token) {
-    return querystring.stringify({ email, token });
+  static queryStrinify(user) {
+    if (!user) {
+      return;
+    }
+    const email = user.email;
+    const token = this.createToken(user._id.toJSON());
+    const queries = querystring.stringify({ email, token });
+    // return querystring.stringify({ email, token });
+    return queries;
   }
 }
 
