@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please enter a password'],
     minlength: [6, 'Minimumum password length is 6 characters'],
   },
+  email_verified: { type: Boolean, default: false },
 });
 
 userSchema.pre('save', async function (next) {
@@ -42,12 +43,17 @@ userSchema.statics.login = async function (email, password) {
   return user;
 };
 
-userSchema.statics.createNew = async function ({ email, password, name }) {
+userSchema.statics.createNew = async function ({
+  email,
+  password,
+  name,
+  email_verified,
+}) {
   const isUser = await this.findOne({ email });
   if (isUser && isUser.email) {
     return 409;
   }
-  const user = new User({ name, email, password });
+  const user = new User({ name, email, password, email_verified });
 
   await user.save();
 
