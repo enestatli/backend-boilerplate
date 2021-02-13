@@ -41,6 +41,44 @@ class Auth {
       protectWithApiKey,
       this.forget.bind(this)
     );
+    this.router.post(
+      '/auth/verify-email',
+      protectWithApiKey,
+      this.verifyEmail.bind(this)
+    );
+  }
+
+  async verifyEmail(req, res) {
+    if (!req.body || !req.body.email || !req.body.token) {
+      res.sendStatus(400); // missing body
+      return;
+    }
+
+    const { email, token } = req.body;
+    const user = await UserModel.findOne({ email });
+
+    try {
+      if (user === null) {
+        res.sendStatus(404); // user doesn't exist
+        return;
+      }
+
+      const decoded = Utils.verify(token);
+
+      if (decoded) {
+        user.email_verified = true;
+        const updated = await user.save();
+        return res.json({
+          authorized: true,
+          user: updated,
+          token: Utils.createToken(updated._id.toJSON()),
+        });
+      }
+      res.sendStatus(403); // wrong token provided
+    } catch (error) {
+      logger.error('Error in verifyEmail <Auth>', error);
+      res.sendStatus(500);
+    }
   }
 
   async socialLogin(req, res) {
