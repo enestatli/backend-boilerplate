@@ -52,7 +52,12 @@ class Auth {
     const { name, email, password } = req.body;
 
     try {
-      const user = await UserModel.createNew({ name, email, password });
+      const user = await UserModel.createNew({
+        name,
+        email,
+        password,
+        email_verified: true,
+      });
 
       if (typeof user === 'number') {
         res.sendStatus(user);
@@ -102,7 +107,12 @@ class Auth {
     const { name, email, password } = req.body;
 
     try {
-      const user = await UserModel.createNew({ name, email, password });
+      const user = await UserModel.createNew({
+        name,
+        email,
+        password,
+        email_verified: false,
+      });
 
       if (typeof user === 'number') {
         res.sendStatus(user);
