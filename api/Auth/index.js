@@ -26,6 +26,12 @@ class Auth {
       this.login.bind(this)
     );
     this.router.post(
+      '/auth/social-login',
+      protectWithApiKey,
+      // requireAuth,
+      this.socialLogin.bind(this)
+    );
+    this.router.post(
       '/auth/update-password',
       protectWithApiKey,
       this.updatePassword.bind(this)
@@ -35,6 +41,33 @@ class Auth {
       protectWithApiKey,
       this.forget.bind(this)
     );
+  }
+
+  async socialLogin(req, res) {
+    if (!req.body || !req.body.name || !req.body.email) {
+      res.sendStatus(400); // missing body
+      return;
+    }
+
+    const { name, email, password } = req.body;
+
+    try {
+      const user = await UserModel.createNew({ name, email, password });
+
+      if (typeof user === 'number') {
+        res.sendStatus(user);
+        return;
+      }
+
+      if (user && user.email) {
+        const token = Utils.createToken(user._id.toJSON());
+        res.json({ user, status: 201, authorized: true, token });
+        return;
+      }
+    } catch (error) {
+      logger.error('Error in socialLogin <Auth>', error);
+      res.sendStatus(500); // server error
+    }
   }
 
   async login(req, res) {
