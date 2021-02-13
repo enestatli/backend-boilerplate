@@ -81,7 +81,7 @@ class Auth {
 
     try {
       if (typeof user === 'number') {
-        res.sendStatus(user); // user doesn't exist
+        res.sendStatus(user); // user doesn't exist or wrong password
         return;
       }
 
@@ -111,6 +111,11 @@ class Auth {
 
       if (user && user.email) {
         const token = Utils.createToken(user._id.toJSON());
+        const queries = Utils.queryStrinify(user);
+        const verifyUrl = `${config.baseUrl}/verify-email?${queries}`;
+
+        SendEmail.VerifyEmail(verifyUrl, email);
+
         res.json({ user, status: 201, authorized: true, token });
         return;
       }
