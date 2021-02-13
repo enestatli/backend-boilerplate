@@ -65,16 +65,18 @@ class Auth {
 
       const decoded = Utils.verify(token);
 
-      if (decoded) {
-        user.email_verified = true;
-        const updated = await user.save();
-        return res.json({
-          authorized: true,
-          user: updated,
-          token: Utils.createToken(updated._id.toJSON()),
-        });
+      if (!decoded) {
+        res.sendStatus(403); // wrong token provided
+        return;
       }
-      res.sendStatus(403); // wrong token provided
+
+      user.email_verified = true;
+      const updated = await user.save();
+      return res.json({
+        authorized: true,
+        user: updated,
+        token: Utils.createToken(updated._id.toJSON()),
+      });
     } catch (error) {
       logger.error('Error in verifyEmail <Auth>', error);
       res.sendStatus(500);
