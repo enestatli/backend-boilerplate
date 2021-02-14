@@ -1,0 +1,27 @@
+# Up like
+GET http://localhost:3000/api/like/up?commentId=602949dd77f3091214bb8223&userId=6021103b43901419f434b13b
+content-type: application/json
+apiKey:bbe44b27f2ea4464a198c929c1adc49e
+
+
+{
+"writer": "602130f12edcc62d44c6f332", "description":"9th comment", "views":0, "privacy":0
+}
+
+###
+
+# Get entities
+GET http://localhost:3000/api/entities?skip=1&limit=5
+content-type: application/json
+apiKey:bbe44b27f2ea4464a198c929c1adc49e
+
+
+###
+
+# Get an entity
+GET http://localhost:3000/api/entity/6028ec59d48afb2fd4860c8a
+content-type: application/json
+apiKey:bbe44b27f2ea4464a198c929c1adc49e
+
+
+###
