@@ -11,14 +11,20 @@ class Comment {
 
   authRoutes() {
     this.router.post(
-      '/comment/saveComment',
+      '/comment/add',
       protectWithApiKey,
       // requireAuth,
-      this.saveComment.bind(this)
+      this.addComment.bind(this)
+    );
+    this.router.get(
+      '/comments/:postId',
+      protectWithApiKey,
+      // requireAuth,
+      this.getComments.bind(this)
     );
   }
 
-  async saveComment(req, res) {
+  async addComment(req, res) {
     if (!req.body) {
       res.sendStatus(400); // missing body
       return;
@@ -43,15 +49,32 @@ class Comment {
         .populate('writer')
         .exec((err, result) => {
           if (err) {
-            res.json({ success: false, err });
+            res.sendStatus(400);
             return;
           }
-          return res.status(200).json({ success: true, result });
+          res.json({ status: 200, result });
         });
     } catch (error) {
       logger.error(__dirname + '\\index.js', error);
       res.sendStatus(500);
     }
+  }
+
+  async getComments(req, res) {
+    if (!req || !req.params || !req.params.postId) {
+      res.sendStatus(422); // unprocessable entity
+      return;
+    }
+
+    CommentModel.find({ postId: req.params.postId })
+      .populate('writer')
+      .exec((err, comments) => {
+        if (err) {
+          res.sendStatus(400);
+          return;
+        }
+        res.json({ status: 200, comments });
+      });
   }
 }
 
