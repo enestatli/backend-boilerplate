@@ -60,6 +60,6 @@ userSchema.statics.createNew = async function ({
   return user;
 };
 
-var User = mongoose.model('user', userSchema);
+var User = mongoose.model('User', userSchema);
 
 module.exports = User;

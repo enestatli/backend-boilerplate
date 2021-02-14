@@ -19,7 +19,7 @@ const CommentSchema = new Schema(
   { timestamps: { createdAt: 'created_at', updatedAt: false } }
 );
 
-var Comment = mongoose.model('comment', CommentSchema);
+var Comment = mongoose.model('Comment', CommentSchema);
 
 module.exports = Comment;
 
