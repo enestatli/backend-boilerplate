@@ -5,7 +5,7 @@ apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
-"writer": "602130f12edcc62d44c6f332", "description":"9th comment", "views":0, "privacy":0
+"writer": "602130f12edcc62d44c6f332", "description":"8th comment", "views":0, "privacy":0
 }
 
 ###

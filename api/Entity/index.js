@@ -80,8 +80,8 @@ class Entity {
     EntityModel.findOne({ _id: req.params.entityId })
       .populate('writer')
       .exec((err, entity) => {
-        if (err) {
-          res.sendStatus(400);
+        if (err || entity === null) {
+          res.sendStatus(404); // no entity
           return;
         }
         res.json({ status: 200, entity });
@@ -89,14 +89,28 @@ class Entity {
   }
 
   async getEntities(req, res) {
+    if (!req.query) {
+      res.sendStatus(422);
+      return;
+    }
     const { skip, limit } = req.query;
 
-    const entities = await EntityModel.find()
-      .limit(parseInt(limit, 10) - 1)
-      .skip(parseInt(skip, 10) - 1)
-      .populate('writer');
+    try {
+      const entities = await EntityModel.find()
+        .limit(parseInt(limit, 10) - 1)
+        .skip(parseInt(skip, 10) - 1)
+        .populate('writer');
 
-    res.json(entities);
+      if (entities === null) {
+        res.sendStatus(404); // no entities
+        return;
+      }
+
+      res.json({ status: 200, entities });
+    } catch (error) {
+      logger.error('Error in getEntities <Entity>', error);
+      res.sendStatus(500);
+    }
   }
 }
 
