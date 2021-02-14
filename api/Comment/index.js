@@ -79,3 +79,5 @@ class Comment {
 }
 
 module.exports = { Comment };
+
+//TODO: getting number of comments should be limited per page
