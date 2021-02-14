@@ -1,11 +1,23 @@
 # Save comment
-POST http://localhost:3000/api/comment/saveComment
+POST http://localhost:3000/api/comment/add
 content-type: application/json
 apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
 {
-"writer": "6021103b43901419f434b13b", "postId":"uniquepostId", "content":"this is another one"
+"writer": "602130f12edcc62d44c6f332", "postId":"uniquepostId", "content":"this is it"
+}
+
+###
+
+# Get comments
+GET http://localhost:3000/api/comments/uniquepostId
+content-type: application/json
+apiKey:bbe44b27f2ea4464a198c929c1adc49e
+
+
+{
+"postId":"uniquepostId"
 }
 
 ###
