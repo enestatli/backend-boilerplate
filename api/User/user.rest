@@ -9,39 +9,13 @@ apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 ###
 
-# Login new user 
-POST http://localhost:3000/api/auth/login 
+# Get user's followers 
+GET http://localhost:3000/api/user/followers/602a78ef52790830bc4995f5
 content-type: application/json
 apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
 
-{
-"email": "eenestatli@gmail.com", "password": "12345678"
-}
-
 ###
 
-# Password forget
-POST http://localhost:3000/api/auth/forget-password
-content-type: application/json
-apiKey: bbe44b27f2ea4464a198c929c1adc49e
-
-{
-"email": "eenestatli@gmail.com"
-}
-
-###
-
-# Password update
-POST http://localhost:3000/api/auth/update-password
-content-type: application/json
-apiKey: bbe44b27f2ea4464a198c929c1adc49e
-
-
-{
-  "email": "eenestatli@gmail.com",
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMjUxZmE5MDZlYTI0MmRkNDVmOWM4ZiIsImlhdCI6MTYxMzA0NzM3NCwiZXhwIjoxNjEzMzA2NTc0fQ.v1VTIKtOBMSLja7sixwPTpqezjR5Yeun0f7QXmUd1iQ",
-  "password": "12345678"
-}
 
 
