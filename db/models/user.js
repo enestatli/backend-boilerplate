@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema({
     minlength: [6, 'Minimumum password length is 6 characters'],
   },
   email_verified: { type: Boolean, default: false },
+  followers: { type: Array, default: [] },
+  followings: { type: Array, default: [] },
 });
 
 userSchema.pre('save', async function (next) {
