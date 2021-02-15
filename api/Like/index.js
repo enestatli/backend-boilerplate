@@ -1,8 +1,5 @@
 const DislikeModel = require('../../db/models/disLike');
 const LikeModel = require('../../db/models/like');
-const UserModel = require('../../db/models/user');
-const CommentModel = require('../../db/models/comment');
-const EntityModel = require('../../db/models/entity');
 
 const { logger } = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
@@ -11,25 +8,54 @@ const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
 class Like {
   constructor(router) {
     this.router = router;
-    this.authRoutes();
+    this.likeRoutes();
   }
 
-  authRoutes() {
+  likeRoutes() {
     this.router.get(
       '/like/up',
       protectWithApiKey,
       // requireAuth,
-      this.upLike.bind(this)
+      this.unlike.bind(this)
     );
     this.router.get(
       '/like/down',
       protectWithApiKey,
       // requireAuth,
-      this.upLike.bind(this)
+      this.like.bind(this)
+    );
+    this.router.get(
+      '/likes',
+      protectWithApiKey,
+      // requireAuth,
+      this.getLikes.bind(this)
     );
   }
 
-  async downLike(req, res) {
+  async getLikes(req, res) {
+    if (!req.query) {
+      res.sendStatus(422);
+      return;
+    }
+
+    let variable = {};
+
+    if (req.query.entityId) {
+      variable = { entityId: req.query.entityId, userId: req.query.userId };
+    } else {
+      variable = { commentId: req.query.commentId, userId: req.query.userId };
+    }
+
+    LikeModel.find(variable).exec((err, likes) => {
+      if (err) {
+        res.sendStatus(400);
+        return;
+      }
+      res.json({ likes, status: 200 });
+    });
+  }
+
+  async unlike(req, res) {
     if (!req.query) {
       res.sendStatus(422);
       return;
@@ -52,7 +78,7 @@ class Like {
     });
   }
 
-  async upLike(req, res) {
+  async like(req, res) {
     if (!req.query) {
       res.sendStatus(422);
       return;
@@ -75,7 +101,7 @@ class Like {
       return;
     }
 
-    DislikeModel.findOneAndDelete(variable).exec((err, dislikeResult) => {
+    DislikeModel.findOneAndDelete(variable).exec((err, result) => {
       if (err) {
         res.sendStatus(400);
         return;
@@ -86,5 +112,3 @@ class Like {
 }
 
 module.exports = { Like };
-
-//TODO: getting number of comments should be limited per page
