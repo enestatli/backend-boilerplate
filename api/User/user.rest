@@ -1,11 +1,10 @@
-# Save new user 
-POST http://localhost:3000/api/auth/register 
+# Follow a user
+POST http://localhost:3000/api/user/follow/602a74d13cda032d18c1d6f7
 content-type: application/json
 apiKey:bbe44b27f2ea4464a198c929c1adc49e
 
-
 {
-"name": "enes tatli", "email": "newuse2r@gmail.com", "password": "123qwe"
+  "followedUserId": "602a78ef52790830bc4995f5" 
 }
 
 ###
