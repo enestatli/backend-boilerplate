@@ -1,5 +1,5 @@
 const CommentModel = require('../../db/models/comment');
-const { logger } = require('../../logger');
+const log = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
 const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
 
@@ -55,7 +55,7 @@ class Comment {
           res.json({ status: 200, result });
         });
     } catch (error) {
-      logger.error(__dirname + '\\index.js', error);
+      log("error", __dirname + '\\index.js' + error.toString());
       res.sendStatus(500);
     }
   }

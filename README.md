@@ -22,3 +22,22 @@
 - Install packages `npm install` and nodemon globally `npm install nodemon -g`
 
 - Run the app `nodemon`
+
+### Logging
+
+Usage
+
+```js
+log("info", "Custom message");
+log("error", "Your message");
+```
+
+Available levels:
+
+- error
+- warn
+- info
+- http
+- verbose
+- debug
+- sill

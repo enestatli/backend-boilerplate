@@ -3,7 +3,7 @@ const express = require('express');
 require('dotenv').config();
 
 const { config } = require('./config');
-const { logger } = require('./logger');
+const log = require('./logger');
 const { useMiddlewares } = require('./middleware');
 const router = require('./api');
 const { checkUser } = require('./middleware/auth');
@@ -18,5 +18,5 @@ useMiddlewares(app);
 app.use('/api', router);
 
 app.listen(config.port, () =>
-  logger.info(`Express is on http://localhost:${config.port}`)
+  log("info", `Express is on http://localhost:${config.port}`)
 );

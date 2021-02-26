@@ -1,5 +1,5 @@
 const UserModel = require('../../db/models/user');
-const { logger } = require('../../logger');
+const log = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
 const { Utils } = require('../../utils');
 const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
@@ -97,7 +97,7 @@ class User {
 
       return res.json(loggedUser);
     } catch (error) {
-      logger.error('Error in follow <User>', error);
+      log("error", 'Error in follow <User>' + error.toString());
       res.sendStatus(500);
     }
   }

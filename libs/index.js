@@ -1,4 +1,4 @@
-const { logger } = require('../logger');
+const log = require('../logger');
 
 const querystring = require('querystring');
 const { renderer } = require('./renderer');
@@ -16,9 +16,9 @@ class Email {
         subject: 'BackendBoilerPlate reset password',
         html,
       });
-      logger.info(`Password reset email sent to ${email}`);
+      log("info", `Password reset email sent to ${email}`);
     } catch (error) {
-      logger.error('Error in ResetPassword <Email>', error);
+      log("error", 'Error in ResetPassword <Email>' + error.toString());
     }
   }
 

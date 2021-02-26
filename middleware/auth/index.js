@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const UserModel = require('../../db/models/user');
-const { logger } = require('../../logger');
+const log = require('../../logger');
 
 // TODO: put middlewares into class
 
@@ -11,7 +11,7 @@ const requireAuth = (req, res, next) => {
   if (token) {
     jwt.verify(token, 'my little secret', (err, decodedToken) => {
       if (err) {
-        logger.error(err.message);
+        log("error", err.message);
         // TODO check status code
         //TODO mb user redirect to the login
         return;
@@ -30,7 +30,7 @@ const checkUser = (req, res, next) => {
   }
   jwt.verify(token, 'my little secret', async (err, decodedToken) => {
     if (err) {
-      logger.error(err.message);
+      log("error", err.message.toString());
       res.locals.user = null;
       return next();
     }
