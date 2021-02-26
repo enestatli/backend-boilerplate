@@ -1,10 +1,10 @@
-const UserModel = require('../../db/models/user');
-const { logger } = require('../../logger');
-const { requireAuth } = require('../../middleware/auth');
-const { Utils } = require('../../utils');
-const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
-const { config } = require('../../config');
-const { SendEmail } = require('../../libs');
+const UserModel = require("../../db/models/user");
+const log = require("../../logger");
+const { requireAuth } = require("../../middleware/auth");
+const { Utils } = require("../../utils");
+const { protectWithApiKey } = require("../../middleware/protectWithApiKey");
+const { config } = require("../../config");
+const { SendEmail } = require("../../libs");
 
 class Auth {
   constructor(router) {
@@ -14,35 +14,35 @@ class Auth {
 
   authRoutes() {
     this.router.post(
-      '/auth/register',
+      "/auth/register",
       protectWithApiKey,
       // requireAuth,
       this.register.bind(this)
     );
     this.router.post(
-      '/auth/login',
+      "/auth/login",
       protectWithApiKey,
       // requireAuth,
       this.login.bind(this)
     );
     this.router.post(
-      '/auth/social-login',
+      "/auth/social-login",
       protectWithApiKey,
       // requireAuth,
       this.socialLogin.bind(this)
     );
     this.router.post(
-      '/auth/update-password',
+      "/auth/update-password",
       protectWithApiKey,
       this.updatePassword.bind(this)
     );
     this.router.post(
-      '/auth/forget-password',
+      "/auth/forget-password",
       protectWithApiKey,
       this.forget.bind(this)
     );
     this.router.post(
-      '/auth/verify-email',
+      "/auth/verify-email",
       protectWithApiKey,
       this.verifyEmail.bind(this)
     );
@@ -78,7 +78,7 @@ class Auth {
         token: Utils.createToken(updated._id.toJSON()),
       });
     } catch (error) {
-      logger.error('Error in verifyEmail <Auth>', error);
+      log("error", "Error in verifyEmail <Auth>" + error.toString());
       res.sendStatus(500);
     }
   }
@@ -99,7 +99,7 @@ class Auth {
         email_verified: true,
       });
 
-      if (typeof user === 'number') {
+      if (typeof user === "number") {
         res.sendStatus(user);
         return;
       }
@@ -110,7 +110,7 @@ class Auth {
         return;
       }
     } catch (error) {
-      logger.error('Error in socialLogin <Auth>', error);
+      log("error", "Error in socialLogin <Auth>" + error.toString());
       res.sendStatus(500); // server error
     }
   }
@@ -125,7 +125,7 @@ class Auth {
     const user = await UserModel.login(email, password);
 
     try {
-      if (typeof user === 'number') {
+      if (typeof user === "number") {
         res.sendStatus(user); // user doesn't exist or wrong password
         return;
       }
@@ -133,7 +133,7 @@ class Auth {
       const token = Utils.createToken(user._id.toJSON());
       res.json({ user, authorized: true, status: 200, token });
     } catch (error) {
-      logger.error(__dirname + '\\index.js', error);
+      log("error", __dirname + "\\index.js" + error.toString());
       res.sendStatus(500);
     }
   }
@@ -154,7 +154,7 @@ class Auth {
         email_verified: false,
       });
 
-      if (typeof user === 'number') {
+      if (typeof user === "number") {
         res.sendStatus(user);
         return;
       }
@@ -170,7 +170,7 @@ class Auth {
         return;
       }
     } catch (error) {
-      logger.error('Error in registeredUser <Auth>', error);
+      log("error", "Error in registeredUser <Auth>" + error.toString());
       res.sendStatus(500); // server error
     }
   }
@@ -194,14 +194,14 @@ class Auth {
           .save()
           .then(() => res.sendStatus(204)) // success
           .catch((e) => {
-            logger.error('Error in updatePassword <Auth>', e);
+            log("error", "Error in updatePassword <Auth>" + e.toString());
             res.sendStatus(500);
           });
       } else {
         res.sendStatus(403); // wrong token provided
       }
     } catch (error) {
-      logger.error(__dirname + '\\index.js', error);
+      log("error", __dirname + "\\index.js" + error.toString());
       res.sendStatus(500);
     }
   }
@@ -225,7 +225,7 @@ class Auth {
       await SendEmail.ResetPassword(resetUrl, user.email);
       res.sendStatus(204); // success
     } catch (error) {
-      logger.error(__dirname + '\\index.js', error);
+      log("error", __dirname + "\\index.js" + error.toString());
       res.sendStatus(500);
     }
   }

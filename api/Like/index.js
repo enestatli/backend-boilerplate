@@ -1,7 +1,7 @@
 const DislikeModel = require('../../db/models/disLike');
 const LikeModel = require('../../db/models/like');
 
-const { logger } = require('../../logger');
+const log = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
 const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
 

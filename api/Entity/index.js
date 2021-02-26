@@ -1,5 +1,5 @@
 const EntityModel = require('../../db/models/entity');
-const { logger } = require('../../logger');
+const log = require('../../logger');
 const { requireAuth } = require('../../middleware/auth');
 const { protectWithApiKey } = require('../../middleware/protectWithApiKey');
 
@@ -66,7 +66,7 @@ class Entity {
           res.json({ status: 200, result });
         });
     } catch (error) {
-      logger.error(__dirname + '\\index.js', error);
+      log("error", __dirname + '\\index.js' + error.toString());
       res.sendStatus(500);
     }
   }
@@ -108,7 +108,7 @@ class Entity {
 
       res.json({ status: 200, entities });
     } catch (error) {
-      logger.error('Error in getEntities <Entity>', error);
+      log("error", 'Error in getEntities <Entity>' + error.toString());
       res.sendStatus(500);
     }
   }

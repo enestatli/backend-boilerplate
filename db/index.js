@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const { config } = require('../config');
-const { logger } = require('../logger');
+const log = require('../logger');
 
 mongoose
   .connect(`${config.mongoDbAtlasUri}`, {
@@ -10,9 +10,9 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => {
-    logger.info(`Connected to mongodb: ${config.mongoDbAtlasUri}`);
+    log("info", `Connected to mongodb: ${config.mongoDbAtlasUri}`);
   });
 
 mongoose.connection.on('error', (err) => {
-  logger.error(err);
+  log("error", err.toString());
 });
